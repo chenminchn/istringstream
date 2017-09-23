@@ -1,29 +1,28 @@
 #include<sstream>
 #include<string>
 #include<iostream>
+#include<fstream>
+#include<vector>
 
 using namespace std;
 
-istream & f(istream& in){
-	string v;
-	while (in >> v, !in.eof()){
-		if (in.bad())
-			throw runtime_error("IO流错误");
-		if (in.fail()){
-			cerr << "数据错误，请重试" << endl;
-			in.clear();
-			in.ignore(100, '\0');
-			continue;
-		}
-		cout << v << endl;
-	}
-	in.clear();
-	return in;
-}
+struct PersonInfo{
+	string name;
+	vector<string> phoneNumber;
+};
 int main(){
-	ostringstream msg;
-	msg << "C++ Primer 第五版" << endl;
-	istringstream in(msg.str());
-	f(in);
+	ifstream in("testfile1.txt");
+	string line;
+	vector<PersonInfo> pinfo;
+	while (getline(in, line)){
+		PersonInfo info;
+		istringstream in(line);
+		in >> info.name;
+		string phone;
+		while (in >> phone){
+			info.phoneNumber.push_back(phone);
+		}
+		pinfo.push_back(info);
+	}
 	return 0;
 }
